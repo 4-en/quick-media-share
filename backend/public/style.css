@@ -1,0 +1,18 @@
+
+#file-explorer {
+    font-family: Arial, sans-serif;
+}
+
+#breadcrumbs {
+    margin-bottom: 20px;
+}
+
+.folder, .file {
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.folder:hover, .file:hover {
+    background-color: #f0f0f0;
+}
