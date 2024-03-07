@@ -12,6 +12,7 @@ use tokio::io::AsyncReadExt;
 use std::path::PathBuf;
 
 
+
 #[derive(Serialize)]
 struct PathItem {
     path: String,
@@ -100,7 +101,9 @@ async fn serve_or_stream_file(file_name: String) -> Result<impl Reply, Rejection
     }
 }
 
-async fn stream_file(file_path: &PathBuf) -> Result<impl Reply, Rejection> {
+// ignore not used
+#[allow(dead_code)]
+async fn stream_file(_file_path: &PathBuf) -> Result<impl Reply, Rejection> {
     // Placeholder for streaming logic with range request support
     // This should include parsing the `Range` header and responding with the appropriate part of the file.
     // For simplicity, this example does not implement the full logic.
