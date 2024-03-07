@@ -7,9 +7,10 @@ Host files in current directory
 qms
 ```
 
+### TODO:
 Host files in any directory
 ```
-qms --root path/to/host
+qms --root path/to/root
 ```
 
 Specify password for access
