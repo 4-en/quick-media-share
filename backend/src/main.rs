@@ -74,12 +74,15 @@ fn json_error_message(message: &str) -> warp::reply::WithStatus<warp::reply::Jso
     warp::reply::with_status(warp::reply::json(&message), StatusCode::INTERNAL_SERVER_ERROR)
 }
 
-async fn serve_or_stream_file(file_name: String) -> Result<impl Reply, Rejection> {
+async fn serve_or_stream_file(tail: warp::filters::path::Tail) -> Result<impl Reply, Rejection> {
     let base_dir = env::current_exe()
         .expect("Failed to get current exe path")
         .parent()
         .expect("Failed to get binary directory")
         .to_path_buf();
+
+    // get string from tail
+    let file_name = tail.as_str();
     
     let file_path = base_dir.join(file_name);
 
@@ -112,6 +115,7 @@ async fn stream_file(_file_path: &PathBuf) -> Result<impl Reply, Rejection> {
 
 
 async fn serve_file_directly(file_path: &PathBuf) -> Result<impl Reply, Rejection> {
+    println!("Serving file: {:?}", file_path);
     let mut file = File::open(file_path).await.map_err(|_| warp::reject::not_found())?;
     let mut buf = Vec::new();
     file.read_to_end(&mut buf).await.map_err(|_| warp::reject::not_found())?;
@@ -175,7 +179,7 @@ fn build_routes() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejec
 
     let serve_or_stream_route = warp::path("api") // Include 'api' in the path
         .and(warp::path("files")) // Then specify 'files'
-        .and(warp::path::param()) // Captures the file name as a parameter
+        .and(warp::path::tail()) // Captures the file name as a parameter
         .and_then(serve_or_stream_file); // Serves or streams the file
 
     // Combine the specific API routes under 'api' and add the serve_or_stream_route
