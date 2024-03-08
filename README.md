@@ -28,3 +28,4 @@ qms --password somepassword
 - support for different uis
 - multiple users and profiles
 - automatic preview files
+- config file
