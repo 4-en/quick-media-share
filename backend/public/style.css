@@ -5,6 +5,9 @@
 
 #breadcrumbs {
     margin-bottom: 20px;
+    margin-right: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
 }
 
 .folder, .file {
@@ -16,3 +19,4 @@
 .folder:hover, .file:hover {
     background-color: #f0f0f0;
 }
+

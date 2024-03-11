@@ -1,4 +1,7 @@
 
+// queue with history
+var my_history = [];
+
 document.addEventListener("DOMContentLoaded", function() {
     navigate("/"); // Initial navigation to the root
 });
@@ -31,9 +34,9 @@ function updateView(data, path) {
     back.className = 'back';
     back.textContent = 'Back';
     back.onclick = () => {
-        const paths = path.split('/').filter(Boolean);
-        paths.pop();
-        navigate('/' + paths.join('/'));
+        // get previous path from history
+        const previousPath = my_history.pop();
+        navigate(previousPath);
     };
     back.style.display = path === '/' ? 'none' : 'inline';
     back.style.cursor = 'pointer';
@@ -48,8 +51,12 @@ function updateView(data, path) {
         element.className = item.is_dir ? 'folder' : 'file';
         element.onclick = () => {
             if (item.is_dir) {
+                // Add the current path to the history
+                my_history.push(path);
                 navigate(item.path);
             } else {
+                // add the current path to the history
+                my_history.push(path);
                 fetchFileContent(item.path);
             }
         };
@@ -60,20 +67,59 @@ function updateView(data, path) {
 async function handle_audio(audio_data) {
     const audio = new Audio();
     audio.src = URL.createObjectURL(audio_data);
+
+    // audio controls
+    audio.controls = true;
+
+    // get element with content id
+    const content = document.getElementById('content');
+    // replace content inner html with audio
+    content.innerHTML = '';
+    content.appendChild(audio);
+
     audio.play();
 }
 
 async function handle_image(image_data) {
     const image = new Image();
     image.src = URL.createObjectURL(image_data);
-    document.body.appendChild(image);
+
+    // style
+    image.style.maxWidth = '90vw';
+    image.style.maxHeight = '90vh';
+
+    // get element with content id
+    const content = document.getElementById('content');
+    // replace content inner html with image
+    content.innerHTML = '';
+    content.appendChild(image);
 }
 
 async function handle_video(video_data) {
     const video = document.createElement('video');
     video.src = URL.createObjectURL(video_data);
-    video.controls = true;
-    document.body.appendChild(video);
+    video.controls = false;
+
+    // custom controls
+    video.onclick = () => {
+        if (video.paused) {
+            video.play();
+        } else {
+            video.pause();
+        }
+    };
+
+
+    
+    // style
+    video.style.maxWidth = '90vw';
+    video.style.maxHeight = '90vh';
+
+    // get element with content id
+    const content = document.getElementById('content');
+    // replace content inner html with video
+    content.innerHTML = '';
+    content.appendChild(video);
 }
 
 async function handle_text(text_data) {
@@ -81,7 +127,10 @@ async function handle_text(text_data) {
     console.log('Text content:', text);
     const pre = document.createElement('pre');
     pre.textContent = text;
-    document.body.appendChild(pre);
+    pre.style.whiteSpace = 'pre-wrap';
+    const content = document.getElementById('content');
+    content.innerHTML = '';
+    content.appendChild(pre);
 }
 
 async function handle_downloadable(data, filename) {
