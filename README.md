@@ -2,7 +2,7 @@
 A simple Rust program that allow sharing files via http without setup 
 
 ## Usage (WIP)
-Host files in current directory
+Host files in current directory (more or less usable right now^^)
 ```
 qms
 ```
