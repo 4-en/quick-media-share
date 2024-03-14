@@ -17,6 +17,11 @@
 		<!-- / -->
 		<div class="flex justify-center space-x-2">
 			<a
+				on:click={() => {
+					getExample().then((res) => {
+						console.log(res);
+					});
+				}}
 				class="btn variant-filled"
 				href="/files"
 				rel="noreferrer"
@@ -28,6 +33,7 @@
 </div>
 
 <script lang="ts">
+	import { listFiles, getFile, getExample } from '../lib/api_client.js';
 </script>
 
 <style lang="postcss">

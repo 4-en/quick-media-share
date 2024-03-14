@@ -15,6 +15,7 @@ async function fetchApi(url: string, options: RequestInit = {}): Promise<Respons
     // host and port should be same as this site, so we can use relative path
     // const url = `http://localhost:3000${path}`; <- not needed (in theorie)
 
+
     const response = await fetch(url, options);
     if (!response.ok) {
         throw new Error(`API request failed: ${response.statusText}`);
@@ -35,7 +36,7 @@ export const getFile = async (path: string): Promise<Blob> => {
 };
 
 export const getExample = async (): Promise<ExampleResponse> => {
-    const url = '/api/example/';
+    const url = 'http://localhost:80/api/example/';
     const response = await fetchApi(url);
     return response.json() as Promise<ExampleResponse>;
 };

@@ -196,6 +196,9 @@ async fn main() {
     
     let routes = build_routes();
 
+    // always allow cross-origin requests (while testing locally)
+    let routes = routes.with(warp::cors().allow_any_origin());
+
     let port: u16 = 80;
     print_server_info(port);
 
