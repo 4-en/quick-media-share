@@ -196,7 +196,7 @@ async fn main() {
     
     let routes = build_routes();
 
-    let port: u16 = 3030;
+    let port: u16 = 80;
     print_server_info(port);
 
     warp::serve(routes).run(([127, 0, 0, 1], port)).await;
