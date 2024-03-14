@@ -6,6 +6,10 @@ Host files in current directory (more or less usable right now^^)
 ```
 qms
 ```
+#### frontend
+cd ui
+npm install
+npm run dev
 
 ### TODO:
 Host files in any directory
