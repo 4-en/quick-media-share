@@ -22,7 +22,7 @@ const Header = () => {
         />
         <MenuList>
           <MenuItem as={RouterLink} to="/">Home</MenuItem>
-          <MenuItem as={RouterLink} to="/navigation">Browse</MenuItem>
+          <MenuItem as={RouterLink} to="/navigate">Browse</MenuItem>
           {/* Additional menu items here */}
         </MenuList>
       </Menu>

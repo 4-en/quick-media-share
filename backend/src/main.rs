@@ -1,7 +1,7 @@
 use rust_embed::RustEmbed;
 use std::collections::HashMap;
 use std::sync::Arc;
-use warp::{http::{Response, StatusCode}, Filter};
+use warp::{http::{Response, StatusCode, Method}, Filter};
 
 use serde::Serialize;
 use std::env;
@@ -10,6 +10,7 @@ use warp::{Rejection, Reply, hyper::Body};
 use tokio::fs::File;
 use tokio::io::AsyncReadExt;
 use std::path::PathBuf;
+
 
 
 
@@ -148,6 +149,8 @@ async fn list_files_and_dirs(requested_path: warp::filters::path::Tail) -> Resul
                 PathItem { path: path_display, is_dir }
             }).collect();
 
+            println!("Listing files and directories...");
+
             return Ok(warp::reply::with_status(warp::reply::json(&paths), StatusCode::OK));
         },
         Err(_) => {
@@ -165,22 +168,32 @@ fn build_routes() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejec
     let files = load_embedded_files(); // Assuming this function loads your embedded files
     let files = Arc::new(files); // Wrap in Arc to share across threads
 
+    let cors = warp::cors()
+        .allow_any_origin() // Allows requests from any origin
+        .allow_methods(vec![Method::GET, Method::POST, Method::DELETE, Method::PUT, Method::OPTIONS]) // Specifies which methods are allowed
+        .allow_headers(vec!["Content-Type", "User-Agent", "Authorization"]) // Specifies which headers are allowed
+        .build();
+
     let static_files = warp::path::tail()
         .map(move |tail: warp::path::Tail| (tail, files.clone()))
-        .and_then(serve_embedded_file); // Serves embedded files
+        .and_then(serve_embedded_file)
+        .with(cors.clone()); // Apply CORS settings
 
     let example_api_route = warp::path("api")
-        .and(warp::path("example").and(warp::get()).and_then(example_api)); // Example API route
+        .and(warp::path("example").and(warp::get()).and_then(example_api))
+        .with(cors.clone()); // Apply CORS settings
 
     let list_files_and_dirs_route = warp::path("api")
         .and(warp::path("list"))
         .and(warp::path::tail()) // Captures the rest of the path
-        .and_then(list_files_and_dirs); // Lists files and directories
+        .and_then(list_files_and_dirs)
+        .with(cors.clone()); // Apply CORS settings
 
     let serve_or_stream_route = warp::path("api") // Include 'api' in the path
         .and(warp::path("files")) // Then specify 'files'
         .and(warp::path::tail()) // Captures the file name as a parameter
-        .and_then(serve_or_stream_file); // Serves or streams the file
+        .and_then(serve_or_stream_file)
+        .with(cors.clone()); // Apply CORS settings
 
     // Combine the specific API routes under 'api' and add the serve_or_stream_route
     let api_routes = list_files_and_dirs_route.or(example_api_route).or(serve_or_stream_route);

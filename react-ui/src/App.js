@@ -8,17 +8,16 @@ import FileView from './components/FileView';
 
 function App() {
   return (
-    <ChakraProvider>
       <Router>
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/navigation" element={<NavigationPage />} />
-          <Route path="/file" element={<FileView />} />
+          <Route path="/navigate/" element={<NavigationPage />} />
+          <Route path="/navigate/:folderPath*" element={<NavigationPage />} />
+          <Route path="/file/:filePath" element={<FileView />} />
           {/* Additional routes can be added here */}
         </Routes>
       </Router>
-    </ChakraProvider>
   );
 }
 
