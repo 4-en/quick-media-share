@@ -27,6 +27,7 @@ qms --password somepassword
 - command line args
 - proper ui using svelte
 - file upload support
+- endpoint for searching
 
 ### maybe
 - support for different uis
