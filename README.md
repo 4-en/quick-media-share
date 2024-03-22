@@ -25,6 +25,7 @@ qms --password somepassword
 ## Plans
 - support range request for media streaming
 - command line args
+- optinal password support
 - proper ui using svelte
 - file upload support
 - endpoint for searching
