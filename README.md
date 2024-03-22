@@ -34,3 +34,5 @@ qms --password somepassword
 - multiple users and profiles
 - automatic preview files
 - config file
+- clients for different devices (mobile, tv)
+- discovery in network (mDNS?)
