@@ -215,5 +215,5 @@ async fn main() {
     let port: u16 = 80;
     print_server_info(port);
 
-    warp::serve(routes).run(([127, 0, 0, 1], port)).await;
+    warp::serve(routes).run(([0, 0, 0, 0], port)).await;
 }
